@@ -1,0 +1,10 @@
+SELECT CONCAT('ALTER TABLE `kuda-data-and-decisioning.',table_schema,'.',table_name,'` ','ALTER COLUMN ',column_name,' SET DATA TYPE BIGNUMERIC;') statement, table_name,data_type,column_name
+  FROM `kuda-data-and-decisioning.dw_mart_credit_clan`.INFORMATION_SCHEMA.COLUMNS
+ WHERE table_name in (SELECT DISTINCT table_name
+                        FROM `kuda-data-and-decisioning.dw_mart_credit_clan`.INFORMATION_SCHEMA.COLUMNS
+                       WHERE data_type = 'NUMERIC'
+                         AND table_name in (SELECT table_name
+                                              FROM `kuda-data-and-decisioning.dw_mart_credit_clan`.INFORMATION_SCHEMA.TABLES
+                                             WHERE table_type = 'BASE TABLE' ) )
+   AND data_type = 'NUMERIC'
+ ORDER BY table_name
